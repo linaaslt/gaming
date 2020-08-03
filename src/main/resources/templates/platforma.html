@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title> Lankytinos vietos </title>
+      		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    		<link rel="stylesheet" href="jqueryui.css">		
+		<style>
+			.anuliuotas, .sanuliuotas {
+				background-color: lightblue;
+			}
+			.ivykdytas, .sivykdytas {
+				background-color: lightgreen;
+			}
+			table {
+				border-collapse: colapse;
+			}
+			th {
+				background-color: lightgreen;			
+			}
+			th, td {
+				padding: 6px;
+				border: 1px solid grey;
+			}
+			nav a {
+		display: inline-block;
+		padding: 12px;
+		margin: 12px;
+		text-decoration: none;
+		color: Black;
+		background-color: #CAB85C;
+		-webkit-border-radius: 8px;
+		-moz-border-radius: 8px;
+		border-radius: 8px;		
+		-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+		box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);		
+		}
+		nav a:hover {
+			text-decoration: underline;	
+			background-color: #E3F392;	
+		}
+	
+		</style>
+	    <script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous">
+	    </script>
+	    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	    
+	    <script src="crud.js"></script>
+	    <script>
+	
+		$( document ).ready ( function() {
+
+			params = {
+			
+				fields: [ 'pav', 'salis' ]
+				, fields_names: [ 'Pavadinimas', 'Salis' ]
+				, url : 'http://localhost:8080/ajax/lst-platforma'
+				, field_data: ''
+				, id_html_saraso: 'platformos'
+				, id_html_dialog_formos: ''
+				, dialog_size_x: 300
+				, dialog_size_y: 390
+				, title_dialog_form: 'Platformos'
+				, url_save_rec: 'http://localhost:8080/ajax/platforma-pakeisti'
+				, url_delete_rec:  'http://localhost:8080/ajax/platforma-salinti'
+				, fields_edit:  [ 'pav', 'salis' ]
+				, fields_ed_types: [ 'text', 'text' ]
+				, field_name: 'pav'
+			}
+			
+			crud_platformu = new crud ( params );
+			
+			crud_platformu.initEmpty();
+			crud_platformu.refreshData();
+			
+		});	
+				 
+</script>
+</head>
+<body>
+<h3> Platformos </h3>
+
+ 	Platformų sąrašas
+<nav>
+	<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+</nav> 	
+<div id="platformos">
+</div>
+ </body>
+</html>

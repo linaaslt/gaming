@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title> Gaming world </title>
+      		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    		<link rel="stylesheet" href="jqueryui.css">		
+		<style>
+			.anuliuotas, .sanuliuotas {
+				background-color: lightblue;
+			}
+			.ivykdytas, .sivykdytas {
+				background-color: lightgreen;
+			}
+			table {
+				border-collapse: colapse;
+			}
+			th {
+				background-color: lightgreen;			
+			}
+			th, td {
+				padding: 6px;
+				border: 1px solid grey;
+			}
+			nav a {
+		display: inline-block;
+		padding: 12px;
+		margin: 12px;
+		text-decoration: none;
+		color: Black;
+		background-color: #CAB85C;
+		-webkit-border-radius: 8px;
+		-moz-border-radius: 8px;
+		border-radius: 8px;		
+		-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+		box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);		
+		}
+		nav a:hover {
+			text-decoration: underline;	
+			background-color: #E3F392;	
+		}
+	
+		</style>
+	    <script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous">
+	    </script>
+	    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	    
+	    <script src="crud.js"></script>
+	    <script>
+	
+		$( document ).ready ( function() {
+
+			$.ajax({
+					url: "http://localhost:8080/ajax/lst-kurejas" 
+			}).done(
+			
+				function( data_kurejas ) {
+				
+					options_kurejas = '';
+					
+					for ( i= 0; i < data_kurejas.length; i++ ) {
+																				//alert ( 'i, id, pav:' + i + ',' + this.produktai [ i ].id + ', ' + this.produktai [ i ].pav )
+	
+						options_kurejas += '<option value="' + data_kurejas [ i ].id + '">' + data_kurejas [ i ].pav + '</option>';
+	
+					}
+																			// alert( options );
+																			
+					select_kurejas = 	'<label for="id_kurejo">Kurejas</label>' +
+						'<select type="text" name="id_kurejo" id="id_kurejo" class="text ui-widget-content ui-corner-all">' +
+							options_kurejas +
+						'</select>';
+						
+					$( '#id_kurejo_place' ).html ( select_kurejas );
+				}	
+			);
+			
+			$.ajax({
+					url: "http://localhost:8080/ajax/lst-platforma" 
+			}).done(
+			
+				function( data_platformu ) {
+				
+					platformu_checkboxai = '';
+					
+					for ( i= 0; i < data_platformu.length; i++ ) {
+																				//alert ( 'i, id, pav:' + i + ',' + this.produktai [ i ].id + ', ' + this.produktai [ i ].pav )
+	
+						platformu_checkboxai += '<label for="platforma_' + data_platformu [ i ].pav +  '">' + data_platformu [ i ].pav  + '</label>' +
+												'<input type="checkbox" name="platforma[]" id="platforma_' + data_platformu [ i ].pav + '" value="' + data_platformu [ i ].id + '" class="text ui-widget-content ui-corner-all">';
+	
+					}
+																			// alert( options );
+																			
+						
+					$( '#platformos_place' ).html ( platformu_checkboxai );
+				}	
+			);			
+																																															
+			crudZaidimai = function(
+			
+				fields
+				, fields_names
+				, url
+				, field_data
+				, id_html_saraso
+				, id_html_dialog_formos
+				, dialog_size_x
+				, dialog_size_y
+				, title_dialog_form
+				, url_save_rec  
+				, url_delete_rec
+				, fields_edit
+				, field_name
+				, fields_ed_types
+			
+			) {
+				params = {
+				
+					fields: fields
+					, fields_names: fields_names
+					, url : url
+					, field_data: field_data
+					, id_html_saraso: id_html_saraso
+					, id_html_dialog_formos: id_html_dialog_formos
+					, dialog_size_x: dialog_size_x
+					, dialog_size_y: dialog_size_y
+					, title_dialog_form: title_dialog_form
+					, url_save_rec: url_save_rec  
+					, url_delete_rec: url_delete_rec
+					, fields_edit: fields_edit
+					, field_name: field_name
+					, fields_ed_types: fields_ed_types
+				}
+				crud.call ( this, params );	// objektu surišimas pagal https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype                (OS/eilute 1)  ..
+			}
+				
+			crudZaidimai.prototype = Object.create( crud.prototype ); // new crud;			// (OS/eilute 2)
+				
+			crudZaidimai.prototype.constructor = crudZaidimai;						// (OS/eilute 3)																			
+																				
+			crud_zaidimai = new crudZaidimai ( 
+
+				[	
+					
+					'pav' 
+					, 'stilius'	
+					, 'reitingas'	
+					, 'kaina'
+					, 'platforma'
+					, 'id_kurejo'
+					, 'ar_isleistas'
+					
+				]
+				, [  'pavadinimas', 'stilius', 'reitingas', 'kaina', 'platforma', 'kurejo<br>pav', 'ar isleistas' ]
+				, 'http://localhost:8080/ajax/lst-zaidimai'
+				, ''				
+				, 'zaidimai'
+				, 'zaidimai_dialogo_forma'
+				, 400
+				, 640
+				, 'Zaidimas'
+				,  'http://localhost:8080/ajax/zaidimai-pakeisti'
+				,  'http://localhost:8080/ajax/zaidimai-salinti'
+				, [ 
+					
+					 'pav' 
+					, 'stilius'	
+					, 'reitingas'	
+					, 'kaina'
+					, 'platforma\\[\\]'
+					, 'id_kurejo'
+					, 'ar_isleistas'
+
+				]
+				, 'pav'
+				,  [ 'text', 'text', 'text', 'text', 'radio', 'select', 'radio' ]
+			);
+			
+			// console.log ( crud_miestai );
+			
+			crud_zaidimai.initEmpty();						
+			crud_zaidimai.refreshData();										
+		});	
+</script>
+</head>
+<body>
+<h3> Žaidimai </h3>
+
+ 	Žaidimų sąrašas
+<nav>
+	<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+</nav> 	
+<div id="zaidimai">
+</div>
+<div id="zaidimai_dialogo_forma" class="ui-dialog-content ui-widget-content">
+	<p class="validateTips">Visi laukeliai turi buti užpildyti.</p>
+	<p class="name_item" id="name_item"></p>
+	<form action="">
+		<fieldset>
+		
+			
+		
+			<label for="pav">pavadinimas</label>
+			<input type="text" name="pav" id="pav" value="" class="text ui-widget-content ui-corner-all">
+				
+			<label for="platuma">stilius</label>
+			<input type="text" name="stilius" id="stilius" value="" class="text ui-widget-content ui-corner-all">
+			
+			<label for="ilguma">reitingas</label>
+			<input type="text" name="reitingas" id="reitingas" value="" class="text ui-widget-content ui-corner-all">
+						
+			<label for="kaina">kaina</label>
+			<input type="text" name="kaina" id="kaina" value="" class="text ui-widget-content ui-corner-all">
+			
+			<div id="platformos_place">
+			</div>
+			
+			<div id="id_kurejo_place">
+				<label for="id_kurejo">Kurėjas</label>
+				<select type="text" name="id_kurejo" id="id_kurejo" class="text ui-widget-content ui-corner-all">
+				</select>
+			</div>
+			
+			<label for="ar_isleistas">Ar išleistas</label>
+			<input type="checkbox" name="ar_isleistas" id="ar_isleistas" value="1" class="text ui-widget-content ui-corner-all">
+			
+						
+			<!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+		</fieldset>
+			<input type="hidden" name="id" id="id_rec" value="0">
+	</form>
+</div>
+ </body>
+</html>
